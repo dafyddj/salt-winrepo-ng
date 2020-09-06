@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '34 6/12 * * *'
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: |
+          sudo apt update
+          sudo apt install -y libcurl4-openssl-dev
+      - uses: pre-commit/action@v2.0.0
+        with:
+          extra_args: --verbose --all-files
