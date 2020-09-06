@@ -1,10 +1,13 @@
+name: schedule
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: '34 6/12 * * *'
+    - cron: '56 6/12 * * *'
 
 jobs:
   pre-commit:
+    name: Check URLs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
