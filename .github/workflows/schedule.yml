@@ -3,7 +3,8 @@ name: schedule
 on:
   workflow_dispatch:
   schedule:
-    - cron: '19 6/12 * * *'
+    - cron: '28 18 * * *'
+    - cron: '28 06 * * *'
 
 jobs:
   pre-commit:
