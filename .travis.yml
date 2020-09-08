@@ -46,6 +46,6 @@ script: |
           git diff --name-only ${TRAVIS_COMMIT_RANGE}
           CHANGED_FILES="$(git diff --name-only ${TRAVIS_COMMIT_RANGE} --)"
           echo $CHANGED_FILES
-          pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref {$TRAVIS_PULL_REQUEST_SHA}
+          git diff --name-only -z ${TRAVIS_COMMIT_RANGE} -- | xargs -0 pre-commit run --verbose --files
       fi
   fi
