@@ -36,7 +36,7 @@ script: |
       else
           # This is a PR build.
           echo "Checking commits:"
-          git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..HEAD --
+          git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}.. --
           git diff --name-only ${TRAVIS_BRANCH}..HEAD --
           pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref HEAD
       fi
