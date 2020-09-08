@@ -8,4 +8,32 @@ before_install:
 install: pip install -r ./.travis/requirements.txt
 script: |
   echo $TRAVIS_COMMIT_RANGE
+  if [ -z "${TRAVIS_COMMIT_RANGE}" ] ; then
+      # This is a new branch.
+      echo "Nothing to do"
+  else
+      # This isn't a new branch.
+      if [ "${TRAVIS_PULL_REQUEST}" = "false" ] ; then
+          # This isn't a PR build.
+  
+          # We need the individual commits to detect force pushes.
+          COMMIT1="$(echo ${TRAVIS_COMMIT_RANGE} | cut -f 1 -d '.')"
+          COMMIT2="$(echo ${TRAVIS_COMMIT_RANGE} | cut -f 4 -d '.')"
+  
+          if [ "$(git cat-file -t ${COMMIT1} 2>/dev/null)" = commit -a "$(git cat-file -t ${COMMIT2} 2>/dev/null)" = commit ] ; then
+              echo "Checking commits:"
+              git log --format=oneline --abbrev-commit ${COMMIT1}..${COMMIT2}
+              git diff --name-only ${COMMIT1}..${COMMIT2} --
+              # This was a history rewrite.
+          else
+              # This is a 'normal' build.
+              echo "Not sure what to do"
+          fi
+      else
+          # This is a PR build.
+          echo "Checking commits:"
+          git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..HEAD
+          git diff --name-only ${TRAVIS_BRANCH}..HEAD --
+      fi
+  fi
   ./.travis/tests.py --travis
