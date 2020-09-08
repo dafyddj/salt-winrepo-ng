@@ -41,8 +41,8 @@ script: |
           echo ${TRAVIS_PULL_REQUEST_SHA}
           echo ${TRAVIS_COMMIT}
           echo "Checking commits:"
-          git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_BRANCH} --
-          git diff --name-only ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_BRANCH} --
-          pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref {$TRAVIS_PULL_REQUEST_BRANCH}
+          git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_SHA} --
+          git diff --name-only ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_SHA} --
+          pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref {$TRAVIS_PULL_REQUEST_SHA}
       fi
   fi
