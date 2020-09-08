@@ -3,8 +3,8 @@ cache:
     pip: true
     directories:
         - $HOME/.cache/pre-commit
-#git:
-#  depth: false
+git:
+  depth: false
 addons:
   apt:
     update: true
