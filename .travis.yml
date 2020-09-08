@@ -43,7 +43,7 @@ script: |
           echo "Checking commits:"
           git checkout -qf ${TRAVIS_PULL_REQUEST_BRANCH}
           git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_SHA} --
-          git diff --name-only ${TRAVIS_BRANCH}..${TRAVIS_PULL_REQUEST_SHA} --
+          git diff --name-only ${TRAVIS_COMMIT_RANGE}
           pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref {$TRAVIS_PULL_REQUEST_SHA}
       fi
   fi
