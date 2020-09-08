@@ -3,11 +3,16 @@ cache:
     pip: true
     directories:
         - $HOME/.cache/pre-commit
-git:
-  depth: false
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y libcurl4-openssl-dev
+#git:
+#  depth: false
+addons:
+  apt:
+    update: true
+    packages: libcurl4-openssl-dev
+
+#before_install:
+#  - sudo apt-get update
+#  - sudo apt-get install -y libcurl4-openssl-dev
 install: pip install pre-commit
 script: |
   echo $TRAVIS_COMMIT_RANGE
