@@ -19,6 +19,8 @@ script: |
           # We need the individual commits to detect force pushes.
           COMMIT1="$(echo ${TRAVIS_COMMIT_RANGE} | cut -f 1 -d '.')"
           COMMIT2="$(echo ${TRAVIS_COMMIT_RANGE} | cut -f 4 -d '.')"
+          echo ${COMMIT1}
+          echo ${COMMIT2}
   
           if [ "$(git cat-file -t ${COMMIT1} 2>/dev/null)" = commit -a "$(git cat-file -t ${COMMIT2} 2>/dev/null)" = commit ] ; then
               # This is a 'normal' build.
@@ -38,4 +40,3 @@ script: |
           pre-commit run --from-ref ${TRAVIS_BRANCH} --to-ref HEAD
       fi
   fi
-  ./.travis/tests.py --travis
