@@ -5,7 +5,7 @@ python:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y libcurl4-openssl-dev
-install: pip install -r ./.travis/requirements.txt
+install: pip install pre-commit
 script: |
   echo $TRAVIS_COMMIT_RANGE
   if [ -z "${TRAVIS_COMMIT_RANGE}" ] ; then
@@ -21,12 +21,13 @@ script: |
           COMMIT2="$(echo ${TRAVIS_COMMIT_RANGE} | cut -f 4 -d '.')"
   
           if [ "$(git cat-file -t ${COMMIT1} 2>/dev/null)" = commit -a "$(git cat-file -t ${COMMIT2} 2>/dev/null)" = commit ] ; then
+              # This is a 'normal' build.
               echo "Checking commits:"
               git log --format=oneline --abbrev-commit ${COMMIT1}..${COMMIT2}
               git diff --name-only ${COMMIT1}..${COMMIT2} --
-              # This was a history rewrite.
+              pre-commit run --from-ref ${COMMIT1} --to-ref ${COMMIT2}
           else
-              # This is a 'normal' build.
+              # This was a history rewrite.
               echo "Not sure what to do"
           fi
       else
@@ -34,6 +35,7 @@ script: |
           echo "Checking commits:"
           git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}..HEAD
           git diff --name-only ${TRAVIS_BRANCH}..HEAD --
+          pre-commit run --from-ref ${TRAVIS_BRANCH} --to-ref HEAD
       fi
   fi
   ./.travis/tests.py --travis
