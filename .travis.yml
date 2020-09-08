@@ -37,6 +37,9 @@ script: |
           fi
       else
           # This is a PR build.
+          echo ${TRAVIS_PULL_REQUEST_BRANCH}
+          echo ${TRAVIS_PULL_REQUEST_SHA}
+          echo ${TRAVIS_COMMIT}
           echo "Checking commits:"
           git log --format=oneline --abbrev-commit ${TRAVIS_BRANCH}.. --
           git diff --name-only ${TRAVIS_BRANCH}..HEAD --
