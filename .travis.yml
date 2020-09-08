@@ -44,6 +44,8 @@ script: |
   #        git checkout -qf ${TRAVIS_PULL_REQUEST_BRANCH}
           git log --format=oneline --abbrev-commit ${TRAVIS_COMMIT_RANGE/.../..} --
           git diff --name-only ${TRAVIS_COMMIT_RANGE}
+          CHANGED_FILES="$(git diff --name-only ${TRAVIS_COMMIT_RANGE} --)"
+          echo $CHANGED_FILES
           pre-commit run --verbose --from-ref ${TRAVIS_BRANCH} --to-ref {$TRAVIS_PULL_REQUEST_SHA}
       fi
   fi
