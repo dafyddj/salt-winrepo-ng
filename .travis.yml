@@ -1,7 +1,8 @@
 language: python
-cache: pip
-python:
-  - 2.7
+cache:
+    pip: true
+    directories:
+        - $HOME/.cache/pre-commit
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y libcurl4-openssl-dev
