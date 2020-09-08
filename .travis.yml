@@ -38,6 +38,8 @@ script: |
               pre-commit run --verbose --from-ref ${COMMIT1} --to-ref ${COMMIT2}
           else
               # This was a history rewrite.
+              git cat-file -t ${COMMIT1}
+              git cat-file -t ${COMMIT2}
               echo "Not sure what to do"
           fi
       else
