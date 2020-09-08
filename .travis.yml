@@ -6,6 +6,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install -y libcurl4-openssl-dev
 install: pip install -r ./.travis/requirements.txt
-script:
-  - echo $TRAVIS_COMMIT_RANGE
-  -  ./.travis/tests.py --travis
+script: |
+  echo $TRAVIS_COMMIT_RANGE
+  ./.travis/tests.py --travis
