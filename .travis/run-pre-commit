@@ -17,7 +17,7 @@ else
         if [ "$(git cat-file -t "${COMMIT1}" 2>/dev/null)" = commit ] && \
            [ "$(git cat-file -t "${COMMIT2}" 2>/dev/null)" = commit ] ; then
             # This is a 'normal' build.
-            echo "Checking pushed commits:" "$(git diff --name-only "${COMMIT1}".."${COMMIT2}" --)"
+            echo "Checking pushed commit files:" "$(git diff --name-only "${COMMIT1}".."${COMMIT2}" --)"
             pre-commit run --verbose --from-ref "${COMMIT1}" --to-ref "${COMMIT2}"
         else
             # This was a history rewrite.
