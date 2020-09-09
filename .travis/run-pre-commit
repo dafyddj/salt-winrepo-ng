@@ -4,6 +4,7 @@ echo "${TRAVIS_COMMIT_RANGE}"
 if [ -z "${TRAVIS_COMMIT_RANGE}" ] ; then
     # This is a new branch.
     echo "Nothing to do"
+    git show --name-only --pretty=format: -z | xargs -0 pre-commit run --verbose --files
 else
     # This isn't a new branch.
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ] ; then
@@ -27,6 +28,7 @@ else
             git cat-file -t "${COMMIT1}"
             git cat-file -t "${COMMIT2}"
             echo "Not sure what to do"
+            git show --name-only --pretty=format: -z | xargs -0 pre-commit run --verbose --files
         fi
     else
         # This is a PR build.
