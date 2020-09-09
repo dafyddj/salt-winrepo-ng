@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
 
-echo "${TRAVIS_COMMIT_RANGE}"
 if [ -z "${TRAVIS_COMMIT_RANGE}" ] ; then
     # This is a new branch.
     echo "New branch - checking HEAD commit files:" "$(git show --name-only --pretty=format:)"
     git show --name-only --pretty=format: -z | xargs -0 pre-commit run --verbose --files
 else
     # This isn't a new branch.
+    echo "Working on commit range:" "${TRAVIS_COMMIT_RANGE}"
     if [ "${TRAVIS_PULL_REQUEST}" = "false" ] ; then
         # This isn't a PR build.
 
