@@ -19,6 +19,7 @@ script:
 
 before_deploy:
   # Install all dependencies required for `semantic-release`
+  - nvm install v12.19.0
   - npm i -D @semantic-release/changelog@3
              @semantic-release/exec@3
              @semantic-release/git@7
