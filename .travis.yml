@@ -13,4 +13,18 @@ addons:
 install:
     - pip install pre-commit
 
-script: .travis/run-pre-commit
+script:
+  - .travis/run-pre-commit
+  - pre-commit run --hook-stage manual --verbose commitlint-travis
+
+before_deploy:
+  # Install all dependencies required for `semantic-release`
+  - npm i -D @semantic-release/changelog@3
+             @semantic-release/exec@3
+             @semantic-release/git@7
+deploy:
+  edge: true
+  provider: script
+  script: npx semantic-release@15.14
+  on:
+    branch: tmp/master
