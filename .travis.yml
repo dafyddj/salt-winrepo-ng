@@ -23,9 +23,13 @@ before_deploy:
   - npm i -D @semantic-release/changelog@3
              @semantic-release/exec@3
              @semantic-release/git@7
+  - export MAINTAINER_TOKEN=${GH_TOKEN}
+  - go get github.com/myii/maintainer
 deploy:
   edge: true
   provider: script
-  script: npx semantic-release@15.14
+  script:
+    - maintainer contributor
+    - npx semantic-release@15.14
   on:
     branch: tmp/master
