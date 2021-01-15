@@ -1,0 +1,30 @@
+name: pre-commit
+
+on: [pull_request, push]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: |
+          sudo apt update
+          sudo apt install -y libcurl4-openssl-dev
+      - id: files
+        uses: lots0logs/gh-action-get-changed-files@2.1.4
+        with:
+          token: ${{ github.token }}
+#        uses: jitterbit/get-changed-files@v1
+#        continue-on-error: true
+      - run: |
+          ls -l ${HOME}
+      - id: jq
+        run: |
+          echo "::set-output name=files::$(jq -r '. | @sh' ${HOME}/files.json)"
+#        uses: sergeysova/jq-action@v2
+#        with:
+#          cmd: jq -r '. | @sh' <<< '${{ steps.files.outputs.all }}'
+      - uses: pre-commit/action@v2.0.0
+        with:
+          extra_args: --verbose --files ${{ steps.jq.outputs.files }}
