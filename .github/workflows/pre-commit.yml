@@ -1,0 +1,19 @@
+name: pre-commit
+
+on: [pull_request, push]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: |
+          sudo apt update
+          sudo apt install -y libcurl4-openssl-dev
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        continue-on-error: true
+      - uses: pre-commit/action@v2.0.0
+        with:
+          extra_args: --verbose --files ${{ steps.files.outputs.added_modified }}
