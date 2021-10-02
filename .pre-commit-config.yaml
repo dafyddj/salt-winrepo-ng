@@ -21,4 +21,5 @@ repos:
           - pyaml
           - pycurl
           - python-magic
+          - salt
           - tabulate
