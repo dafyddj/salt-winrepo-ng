@@ -1,0 +1,6 @@
+root_dir: /tmp/salt
+disable_fqdn_grains: true
+file_client: local
+# Get around the fact thar winrepo module is only meant for Windows
+providers:
+  winrepo: winrepo

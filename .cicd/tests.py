@@ -4,6 +4,7 @@ import git
 import glob
 import magic
 import pycurl as curl
+import salt.client
 import sys
 import traceback
 import yaml
@@ -176,6 +177,8 @@ if len(our_files) == 0:
     print("No files to check. No problem.")
     exit(0)
 
+caller = salt.client.Caller(".cicd/minion")
+
 for file in our_files:
     try:
         print("---( " + file + " )---")
@@ -189,8 +192,7 @@ for file in our_files:
                 data = yaml.load(yml, Loader=yaml.FullLoader)
                 process_each(data)
         else:
-            yml = t.render()
-            data = yaml.load(yml, Loader=yaml.FullLoader)
+            data = caller.cmd("winrepo.show_sls", file)
             process_each(data)
     except Exception:
         exc = sys.exc_info()[0]
