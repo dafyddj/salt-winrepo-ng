@@ -1,0 +1,7 @@
+file_client: local
+root_dir: .salt
+log_file: minion.log
+
+file_roots:
+  base:
+    - .

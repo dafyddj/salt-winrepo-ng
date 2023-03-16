@@ -5,3 +5,9 @@
 .DS_Store
 grains
 venv
+
+# Ignore (and track) these files for a development Salt environment
+.salt/*
+!.salt/etc
+.salt/etc/*
+!.salt/etc/minion
