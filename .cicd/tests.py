@@ -220,6 +220,7 @@ for file in our_files:
                 print(label + "-" * (80 - len(label)))
                 caller = salt.client.Caller(".cicd/minion")
                 caller.cmd("grains.set", "cpuarch", cpuarch)
+                caller.cmd("saltutil.refresh_grains")
                 data = caller.cmd("winrepo.show_sls", file)
                 process_each(data)
         else:
