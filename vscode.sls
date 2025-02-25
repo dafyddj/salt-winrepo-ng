@@ -1,4 +1,4 @@
-# due to winrepo installer limitations you need to manually download x86 + x64 System installer from
+# due to winrepo installer limitations you need to manually download x86 + x64 System installer from X
 # https://code.visualstudio.com/Download
 # and put it on the winrepo on master to install it the 'salt://win/repo-ng/vscode/...
 
