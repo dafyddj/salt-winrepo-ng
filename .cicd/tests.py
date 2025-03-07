@@ -3,6 +3,7 @@ import getopt
 import glob
 import magic
 import requests
+import salt.config
 import salt.client
 import sys
 import time
@@ -200,6 +201,15 @@ if len(our_files) == 0:
 # This is a stupid thing we have to do because the grains don't flip right
 label_rev = {"AMD64": "x86", "x86": "AMD64"}
 
+
+overrides = {"root_dir": "/tmp/salt"}
+__opts__ = salt.config.apply_minion_config({**overrides, "grains": {"cpuarch": "AMD64"}})
+winrepomod_AMD64 = salt.loader.raw_mod(__opts__, 'winrepo', None)
+grainsmod = salt.loader.raw_mod(__opts__, "grains", None)
+printd("grains", grainsmod["grains.items"]())
+__opts__ = salt.config.apply_minion_config({**overrides, "grains": {"cpuarch": "x86"}})
+winrepomod_x86 = salt.loader.raw_mod(__opts__, 'winrepo', None)
+
 for file in our_files:
     try:
         label = " ( {} ) ".format(file)
@@ -218,13 +228,12 @@ for file in our_files:
                 count = round( count / 2)
                 label = "-" * count + label + "-" * count
                 print(label + "-" * (80 - len(label)))
-                caller = salt.client.Caller(".cicd/minion")
-                caller.cmd("grains.set", "cpuarch", cpuarch)
-                data = caller.cmd("winrepo.show_sls", file)
+                data = winrepomod_AMD64["winrepo.show_sls"](file)
+                printd("data", data)
                 process_each(data)
         else:
-            caller = salt.client.Caller(".cicd/minion")
-            data = caller.cmd("winrepo.show_sls", file)
+            data = winrepomod_AMD64["winrepo.show_sls"](file)
+            printd("data", data)
             process_each(data)
     except Exception:
         exc = sys.exc_info()[0]
