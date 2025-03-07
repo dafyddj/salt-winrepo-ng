@@ -203,11 +203,9 @@ label_rev = {"AMD64": "x86", "x86": "AMD64"}
 
 
 overrides = {"root_dir": "/tmp/salt"}
-__opts__ = salt.config.apply_minion_config({**overrides, "grains": {"cpuarch": "AMD64"}})
+__opts__ = salt.config.apply_minion_config(overrides | {"grains": {"cpuarch": "AMD64"}})
 winrepomod_AMD64 = salt.loader.raw_mod(__opts__, 'winrepo', None)
-grainsmod = salt.loader.raw_mod(__opts__, "grains", None)
-printd("grains", grainsmod["grains.items"]())
-__opts__ = salt.config.apply_minion_config({**overrides, "grains": {"cpuarch": "x86"}})
+__opts__ = salt.config.apply_minion_config(overrides | {"grains": {"cpuarch": "x86"}})
 winrepomod_x86 = salt.loader.raw_mod(__opts__, 'winrepo', None)
 
 for file in our_files:
