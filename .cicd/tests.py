@@ -202,7 +202,7 @@ if len(our_files) == 0:
 label_rev = {"AMD64": "x86", "x86": "AMD64"}
 
 winrepo = {}
-overrides = {"root_dir": "/tmp/salt"}
+overrides = {"providers": {"pkg": "win_pkg"}, "root_dir": "/tmp/salt"}
 
 __opts__ = salt.config.apply_minion_config(overrides)
 __salt__ = salt.loader.minion_mods(__opts__)
