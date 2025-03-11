@@ -4,7 +4,7 @@ import glob
 import magic
 import requests
 import salt.config
-import salt.client
+import salt.loader
 import sys
 import time
 import traceback
@@ -201,12 +201,17 @@ if len(our_files) == 0:
 # This is a stupid thing we have to do because the grains don't flip right
 label_rev = {"AMD64": "x86", "x86": "AMD64"}
 
-
+winrepo = {}
 overrides = {"root_dir": "/tmp/salt"}
+
+__opts__ = salt.config.apply_minion_config(overrides)
+__salt__ = salt.loader.minion_mods(__opts__)
+
 __opts__ = salt.config.apply_minion_config(overrides | {"grains": {"cpuarch": "AMD64"}})
-winrepomod_AMD64 = salt.loader.raw_mod(__opts__, 'winrepo', None)
+winrepo["AMD64"] = salt.loader.raw_mod(__opts__, "winrepo", __salt__)
+
 __opts__ = salt.config.apply_minion_config(overrides | {"grains": {"cpuarch": "x86"}})
-winrepomod_x86 = salt.loader.raw_mod(__opts__, 'winrepo', None)
+winrepo["x86"] = salt.loader.raw_mod(__opts__, "winrepo", __salt__)
 
 for file in our_files:
     try:
@@ -220,17 +225,17 @@ for file in our_files:
             template = stream.read()
         if "cpuarch" in template:
             for cpuarch in ["AMD64", "x86"]:
-                label = " ( arch: {} ) ".format(label_rev[cpuarch])
+                label = " ( arch: {} ) ".format(cpuarch)
                 count = 80 - len(label)
                 count = count - count % 2
                 count = round( count / 2)
                 label = "-" * count + label + "-" * count
                 print(label + "-" * (80 - len(label)))
-                data = winrepomod_AMD64["winrepo.show_sls"](file)
+                data = winrepo[cpuarch]["winrepo.show_sls"](file)
                 printd("data", data)
                 process_each(data)
         else:
-            data = winrepomod_AMD64["winrepo.show_sls"](file)
+            data = winrepo["AMD64"]["winrepo.show_sls"](file)
             printd("data", data)
             process_each(data)
     except Exception:
